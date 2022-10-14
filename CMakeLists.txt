@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
 
 set(PROJECT Tester)
-set(SOURCE src/main.c)
+
+set(HEADERS src/bars.h src/config.h)
+set(SOURCE src/main.c src/bars.c src/config.c)
 
 project(${PROJECT})
-add_executable(${PROJECT} ${SOURCE})
+add_executable(${PROJECT} ${SOURCE} ${HEADERS})
