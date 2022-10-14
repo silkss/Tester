@@ -63,9 +63,6 @@ Bars* read_from_file(char* file_path)
     }
 
     char buffer[100]; int current_line = 0;
-    if (bars->Items) {
-        retru
-    }
     while (fgets(buffer, 100, f) != NULL)
     {
         if (current_line > (bars->Length)) break;
