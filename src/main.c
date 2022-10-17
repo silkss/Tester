@@ -1,6 +1,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#include <conio.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -16,34 +17,41 @@ int main(int argc, char* argv[])
         printf("Error while creating config!\n"); 
         goto exit;
     }
+
     Bars* bars = read_from_file(config->file_path); 
     if (bars == NULL)
     {
         printf("Something wrong with reading file!\n");
         goto exit;
     }
-    else 
+
+    Price* fr_ema = calc_ema(bars, 30);
+    if (fr_ema == NULL)
     {
-        printf("Config:\n\tfile-path: %s\n", config->file_path);
-    }
-    for (int i = 10; i < 20; i++)
-    {
-        printf("bar[%d]: O:%f\tH:%f\tL:%f\tC:%f\tV:%d\n", i,
-            bars->Items[i].Open, 
-            bars->Items[i].High, 
-            bars->Items[i].Low, 
-            bars->Items[i].Close, 
-            bars->Items[i].Volume);
+        goto exit;
     }
 
+    printf("Config:\n\tfile-path: %s\n", config->file_path);
+    for (int i = 25; i < 40; i++)
+    {
+        printf("bar[%d]: C:%f\tEMA:%f\n", i,
+            bars->Items[i].Close, 
+            fr_ema[i]);
+    }
+
+    getch();
+
     exit:
-    //if (bars != NULL) fre(bars);
-    if (config != NULL) free(config);
-    if (bars != NULL)
+    if (config) free(config);
+    if (bars)
     {
         if (bars->Items)
             free(bars->Items);
         free(bars);
+    }
+    if (fr_ema)
+    {
+        free(fr_ema);
     }
     _CrtDumpMemoryLeaks();
     return 0;

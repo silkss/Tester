@@ -18,6 +18,7 @@ typedef struct
     int Length;
 } Bars;
 
-Bars* read_from_file(const char* file_path);
+Bars* read_from_file(char* file_path);
+Price* calc_ema(Bars* bars, int period);
 
 #endif /*BARS_H_INCLUDE*/
