@@ -9,6 +9,22 @@
 #include "config.h"
 #include "bars.h"
 
+#define MIN_BARS 50
+
+
+enum TraderStatus
+{
+    NeedToOpenLong,
+    Long,
+    NeedToOpenShort,
+    Short,
+    Flat
+};
+
+typedef struct 
+{
+    enum TraderStatus Status
+};
 int main(int argc, char* argv[])
 {
     Config* config = read_config_from_args(argc, argv);
@@ -32,11 +48,15 @@ int main(int argc, char* argv[])
     }
 
     printf("Config:\n\tfile-path: %s\n", config->file_path);
-    for (int i = 25; i < 40; i++)
+    for (int i = MIN_BARS; i < bars->Length; i++)
     {
-        printf("bar[%d]: C:%f\tEMA:%f\n", i,
-            bars->Items[i].Close, 
-            fr_ema[i]);
+        if (bars->Items[i].Close > fr_ema[i])
+        {
+
+        }
+        //printf("bar[%d]: C:%f\tEMA:%f\n", i,
+        //    bars->Items[i].Close, 
+        //    fr_ema[i]);
     }
 
     getch();
