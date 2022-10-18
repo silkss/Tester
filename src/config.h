@@ -1,11 +1,10 @@
 #ifndef CONFIG_H_INCLUDE
 #define CONFIG_H_INCLUDE
 
-typedef struct 
-{
-    char* file_path;
+typedef struct {
+    char* DataPath;
 } Config;
 
-Config* read_config_from_args(int argc, char* argv[]);
+Config* BuildConfigFromArgs(int argc, char* argv[]);
 
 #endif /*CONFIG_H_INCLUDE*/

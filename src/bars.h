@@ -3,8 +3,7 @@
 
 typedef double Price;
 
-typedef struct 
-{
+typedef struct {
     Price Open;
     Price High;
     Price Low;
@@ -12,13 +11,11 @@ typedef struct
     int Volume;
 } Bar;
 
-typedef struct
-{
+typedef struct {
     Bar* Items;
     int Length;
-} Bars;
+} ListofBars;
 
-Bars* read_from_file(char* file_path);
-Price* calc_ema(Bars* bars, int period);
+ListofBars* ReadBarsFromFile(char* filePath);
 
 #endif /*BARS_H_INCLUDE*/

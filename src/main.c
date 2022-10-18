@@ -6,73 +6,106 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "config.h"
-#include "bars.h"
+#include "Config.h"
+#include "Bars.h"
+#include "Tester.h"
 
-#define MIN_BARS 50
+#define FREE_POINTER(p) if (p) free(p)
 
+Config*     config  = NULL;
+ListofBars* bars    = NULL;
 
-enum TraderStatus
-{
-    NeedToOpenLong,
-    Long,
-    NeedToOpenShort,
-    Short,
-    Flat
-};
-
-typedef struct 
-{
-    enum TraderStatus Status
-};
 int main(int argc, char* argv[])
 {
-    Config* config = read_config_from_args(argc, argv);
+    config = BuildConfigFromArgs(argc, argv);
     if (config == NULL)
     {
         printf("Error while creating config!\n"); 
         goto exit;
     }
-
-    Bars* bars = read_from_file(config->file_path); 
+    bars = ReadBarsFromFile(config->DataPath);
     if (bars == NULL)
     {
         printf("Something wrong with reading file!\n");
         goto exit;
     }
 
-    Price* fr_ema = calc_ema(bars, 30);
-    if (fr_ema == NULL)
+    StartTest(bars);
+    /*Price* long_ema = malloc(sizeof(Price) * bars->Length);
+    if (long_ema == NULL)
     {
+        printf("Can`t alloc memory for LONG_EMA array!\n");
         goto exit;
     }
-
-    printf("Config:\n\tfile-path: %s\n", config->file_path);
-    for (int i = MIN_BARS; i < bars->Length; i++)
+    Price* short_ema = malloc(sizeof(Price) * bars->Length);
+    if (short_ema == NULL)
     {
-        if (bars->Items[i].Close > fr_ema[i])
-        {
+        printf("Can`t alloc memory for SHOR_EMA array!\n");
+        goto exit;
+    }*/
 
-        }
-        //printf("bar[%d]: C:%f\tEMA:%f\n", i,
-        //    bars->Items[i].Close, 
-        //    fr_ema[i]);
-    }
+    //printf("Short#\t| Long#\t| Position\t| PnL\t Longs\t| Shorts\n");
+    //for (int long_period = 5; long_period <= 50; long_period++)
+    //{
+    //    for (int short_period = 5; short_period <= 50; short_period++)
+    //    {
+    //        Trader trader = { Flat, 0, 0.0, 0, 0 };
+    //        if (calc_ema(bars, long_ema, long_period) < 0)
+    //        {
+    //            printf("Something wrong with calculating LONG_EMA %d!\n", long_period);
+    //            break;
+    //        }
+    //        if (calc_ema(bars, short_ema, short_period) < 0)
+    //        {
+    //            printf("Something wrong with calculating SHORT_EMA %d!\n", short_period);
+    //            break;
+    //        }
+    //        for (int num_bar = MIN_BARS; num_bar < bars->Length; num_bar++)
+    //        {
+    //            if (trader.Status == NeedToOpenLong)
+    //            {
+    //                if (trader.Position != 1)
+    //                {
+    //                    trader.Position = 1;
+    //                    trader.PnL = trader.PnL - bars->Items[num_bar].Open;
+    //                    trader.NumberOFLongs++;
+    //                }
+    //            }
+    //            else if (trader.Status == NeedToOpenShort)
+    //            {
+    //                if (trader.Position != -1)
+    //                {
+    //                    trader.Position = -1;
+    //                    trader.PnL = trader.PnL + bars->Items[num_bar].Open;
+    //                    trader.NumberOfShorts++;
+    //                }
+    //            }
 
+    //            if (bars->Items[num_bar].Close > long_ema[num_bar])
+    //            {
+    //                /* need to buy */
+    //                trader.Status = NeedToOpenLong;
+    //            }
+    //            else if (bars->Items[num_bar].Close < short_ema[num_bar])
+    //            {
+    //                /* need to sell */
+    //                trader.Status = NeedToOpenShort;
+    //            }
+    //        }
+    //        printf("%d\t| %d\t| %d\t| %f\t| %d\t| %d\n",
+    //            short_period, long_period,
+    //            trader.Position,
+    //            trader.PnL,
+    //            trader.NumberOFLongs,
+    //            trader.NumberOfShorts);
+    //    }
+    //}
+    //
     getch();
 
-    exit:
-    if (config) free(config);
-    if (bars)
-    {
-        if (bars->Items)
-            free(bars->Items);
-        free(bars);
-    }
-    if (fr_ema)
-    {
-        free(fr_ema);
-    }
+exit:
+    FREE_POINTER(config);
+    FREE_POINTER(bars);
     _CrtDumpMemoryLeaks();
     return 0;
 }

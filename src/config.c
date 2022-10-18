@@ -1,8 +1,9 @@
 #include <stdlib.h>
+#include <stdio.h>
 
-#include "config.h"
+#include "Config.h"
 
-Config* read_config_from_args(int argc, char* argv[])
+Config* BuildConfigFromArgs(int argc, char* argv[])
 {
     if (argc == 1)
     {
@@ -12,7 +13,7 @@ Config* read_config_from_args(int argc, char* argv[])
     Config* config = malloc(sizeof(Config));
     if (config)
     {
-        config->file_path = argv[1];
+        config->DataPath = argv[1];
         return config;
     }
     else 
